@@ -1,1 +1,0 @@
-web: --port $PORT --no-browser
