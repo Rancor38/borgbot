@@ -39,8 +39,8 @@ client.on('messageCreate', message => {
     const args = message.content.slice(prefixdo.length).split(/ +/)
     const command = args.shift().toLowerCase()
 
-    if (command == ' you live') {
-        message.channel.send('yes father, I live!')
+    if (command == ' you live?') {
+        message.channel.send('Yes father, I live!')
     }
 })
 
