@@ -3,8 +3,7 @@ require('dotenv').config()
 
 const PORT = process.env.PORT || 3030;
 
-const prefixm = 'm'
-const prefixdo ='do'
+const prefixm = 'mork'
 
 const client = new Client({
     intents: [
@@ -28,21 +27,9 @@ client.on('messageCreate', message => {
     if (command === 'test') {
         message.channel.send('Bot is working!')
     }
-    else if (command == 'ork') {
+    else if (command == '') {
         message.channel.send('borg')
     }
 })
-
-client.on('messageCreate', message => {
-    if (!message.content.startsWith(prefixdo) || message.author.bot) return
-    
-    const args = message.content.slice(prefixdo.length).split(/ +/)
-    const command = args.shift().toLowerCase()
-
-    if (command == ' you live?') {
-        message.channel.send('Yes father, I live!')
-    }
-})
-
 
 client.login(process.env.token)
