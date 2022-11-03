@@ -30,6 +30,9 @@ client.on('messageCreate', message => {
     else if (command == '') {
         message.channel.send('borg')
     }
+    else if (command == ' are you alive?') {
+        message.channel.send('borgborg')
+    }
 })
 
 client.login(process.env.token)
