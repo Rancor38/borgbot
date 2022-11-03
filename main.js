@@ -1,5 +1,5 @@
 const {Client, Events, GatewayIntentBits, Application} = require('discord.js')
-const { token } = require('./config.json')
+require('dotenv').config()
 
 const PORT = process.env.PORT || 3030;
 
@@ -33,4 +33,4 @@ client.on('messageCreate', message => {
 })
 
 
-client.login(token)
+client.login(process.env.token)
