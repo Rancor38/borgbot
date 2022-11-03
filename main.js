@@ -3,7 +3,7 @@ require('dotenv').config()
 
 const PORT = process.env.PORT || 3030;
 
-const prefixm = 'mork'
+const prefixm = 'm'
 
 const client = new Client({
     intents: [
@@ -27,11 +27,8 @@ client.on('messageCreate', message => {
     if (command === 'test') {
         message.channel.send('Bot is working!')
     }
-    else if (command === ' ') {
+    else if (command == 'ork') {
         message.channel.send('borg')
-    }
-    else if (command === ' are you alive?') {
-        message.channel.send('borgborg')
     }
 })
 
