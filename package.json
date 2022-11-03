@@ -4,7 +4,7 @@
   "description": "this is a template for creating discord bots",
   "main": "main.js",
   "scripts": {
-    "test": "test"
+    "start": "node main.js"
   },
   "author": "Zakariah",
   "license": "ISC",
