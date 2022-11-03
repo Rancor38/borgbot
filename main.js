@@ -27,7 +27,7 @@ client.on('messageCreate', message => {
     if (command === 'test') {
         message.channel.send('Bot is working!')
     }
-    else if (command === '') {
+    else if (command === ' ') {
         message.channel.send('borg')
     }
     else if (command === ' are you alive?') {
