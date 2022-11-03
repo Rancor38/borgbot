@@ -1,8 +1,6 @@
 const {Client, Events, GatewayIntentBits, Application} = require('discord.js')
 require('dotenv').config()
 
-const PORT = process.env.PORT || 3030;
-
 const prefixm = 'm'
 
 const client = new Client({
