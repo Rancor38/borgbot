@@ -22,7 +22,7 @@ client.once(Events.ClientReady, () => {
 client.on('messageCreate', message => {
     if (!message.content.startsWith(prefixm) || message.author.bot) return
     
-    const args = message.content.slice(prefix.length).split(/ +/)
+    const args = message.content.slice(prefixm.length).split(/ +/)
     const command = args.shift().toLowerCase()
 
     if (command === 'test') {
@@ -36,7 +36,7 @@ client.on('messageCreate', message => {
 client.on('messageCreate', message => {
     if (!message.content.startsWith(prefixdo) || message.author.bot) return
     
-    const args = message.content.slice(prefix.length).split(/ +/)
+    const args = message.content.slice(prefixdo.length).split(/ +/)
     const command = args.shift().toLowerCase()
 
     if (command == ' you live') {
