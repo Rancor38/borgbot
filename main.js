@@ -17,7 +17,7 @@ client.once(Events.ClientReady, () => {
 })
 
 client.on('messageCreate', message => {
-    if (!message.content.startsWith(prefixm) || message.author.bot) return
+    if (!message.content.toLocaleLowerCase().startsWith(prefixm) || message.author.bot) return
     
     const args = message.content.slice(prefixm.length).split(/ +/)
     const command = args.shift().toLowerCase()
@@ -26,10 +26,10 @@ client.on('messageCreate', message => {
         message.channel.send('Bot is working!')
     }
     else if (command == 'ork') {
-        message.channel.send('borg')
+        message.channel.send('*Borg*')
     }
     else if (command == 'ark') {
-        message.channel.send('barg')
+        message.channel.send('*Barg*')
     }
 })
 
