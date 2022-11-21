@@ -28,6 +28,9 @@ client.on('messageCreate', message => {
     else if (command == 'ork') {
         message.channel.send('borg')
     }
+    else if (command == 'ark') {
+        message.channel.send('barg')
+    }
 })
 
 client.login(process.env.token)
