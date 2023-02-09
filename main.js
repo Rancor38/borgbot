@@ -1,7 +1,7 @@
 const {Client, Events, GatewayIntentBits, Application} = require('discord.js')
 require('dotenv').config()
 
-const prefixm = 'm'
+const mork = 'mork'
 
 const client = new Client({
     intents: [
@@ -17,19 +17,18 @@ client.once(Events.ClientReady, () => {
 })
 
 client.on('messageCreate', message => {
-    if (!message.content.toLocaleLowerCase().startsWith(prefixm) || message.author.bot) return
+    // console.log(message.content.toLocaleLowerCase().split(" "))
+    if (message.author.bot) return
     
-    const args = message.content.slice(prefixm.length).split(/ +/)
-    const command = args.shift().toLowerCase()
+    // const args = message.content.slice(prefixm.length).split(/ +/)
+    // console.log(args)
+    // const command = args.shift().toLowerCase()
 
-    if (command === 'test') {
-        message.channel.send('Bot is working!')
+    if (message.content.toLocaleLowerCase().split(" ").includes('mark')) {
+        message.channel.send('*barg*')
     }
-    else if (command == 'ork') {
-        message.channel.send('*Borg*')
-    }
-    else if (command == 'ark') {
-        message.channel.send('*Barg*')
+    if (message.content.toLocaleLowerCase().split(" ").includes(mork)) {
+        message.channel.send('*borg*')
     }
 })
 
