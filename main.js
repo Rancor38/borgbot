@@ -17,7 +17,7 @@ const {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const commands = ["borgbot", "borgbot,", "mork", "mark", "zak", "pigcoins"];
+const commands = ["borgbot", "borgbot,", "mork", "mark", "zak", "pigcoins", 'bottest'];
 
 const client = new Client({
     intents: [
@@ -46,7 +46,7 @@ client.on("messageCreate", (message) => {
     // console.log(args + " is args")
     const command = args.toLowerCase();
 
-    if (command.includes("test")) {
+    if (command.includes("bottest")) {
         message.channel.send("Bot is working!");
     } else if (command.includes("mork")) {
         message.channel.send("*borg*");
@@ -59,9 +59,9 @@ client.on("messageCreate", (message) => {
         if (Number(quantity) > 0) {
             message.channel.send(convertToGold(quantity))
         }
-        console.log(quantity)
-    } else if (command === "borgbot" || "borgbot,") {
-        // console.log("borghit " + args)
+        // console.log(quantity)
+    } else if (command.includes("borgbot")) {
+        // console.log("borghit " + args + " We got the regex")
         const PROMPT =
             "Respond to the following prompt using only a randomly selected series of words from the following array (the response can repeat words from the array multiple times) array: [mork, mork, mork, mork, mork, Mork, mork Mork, MORK, borg, borg, borg, borg, borg, Barg, BARG, balg]. Prompt: " +
             removeBorgbot(args);
@@ -70,7 +70,7 @@ client.on("messageCreate", (message) => {
             model: "text-davinci-003",
             prompt: PROMPT,
             temperature: 0.5,
-            max_tokens: 15,
+            max_tokens: 20,
             n: 3,
         });
 
