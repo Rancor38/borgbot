@@ -61,11 +61,10 @@ client.on("messageCreate", (message) => {
         }
         // console.log(quantity)
     } else if (command.includes("borgbot")) {
-        // console.log("borghit " + args + " We got the regex")
+        console.log(args)
         const PROMPT =
-            "Respond to the following prompt using only a randomly selected series of words from the following array (the response can repeat words from the array multiple times) array: [mork, mork, mork, mork, mork, Mork, mork Mork, MORK, borg, borg, borg, borg, borg, Barg, BARG, balg]. Prompt: " +
-            removeBorgbot(args);
-        // console.log(PROMPT + " is PROMPT");
+            "Respond to the following prompt using only a randomly selected series of words from the following array (the response can repeat words from the array multiple times) array: [mork, mork, mork, mork, mork, Mork, mork Mork, MORK, borg, borg, borg, borg, borg, Barg, BARG, balg]"
+        console.log(PROMPT + " is PROMPT");
         const raw = JSON.stringify({
             model: "text-davinci-003",
             prompt: PROMPT,
