@@ -2,8 +2,8 @@ const { Client, Events, GatewayIntentBits, Application } = require('discord.js')
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const router = express.Router()
 require('dotenv').config()
+const fetch = require("node-fetch");
 const apiController = require('./controllers/apiController');
 const { response } = require('express');
 
