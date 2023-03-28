@@ -81,7 +81,7 @@ client.on('messageCreate', message => {
                 model: "text-davinci-003",
                 prompt: PROMPT,
                 temperature: 0.5,
-                max_tokens: 150,
+                max_tokens: 15,
                 n: 3,
             });
         
