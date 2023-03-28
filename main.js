@@ -64,18 +64,18 @@ client.on('messageCreate', message => {
     if (command.includes("test")) {
         message.channel.send('Bot is working!')
     }
-    else if (command == 'mork') {
+    else if (command.includes('mork')) {
         message.channel.send('*borg*')
     }
-    else if (command == 'mark') {
+    else if (command.includes('mark')) {
         message.channel.send('*barg*')
     }
-    else if (command == 'zak') {
+    else if (command.includes('zak')) {
         message.channel.send('*balg*')
     }
-    else if (command == 'borgbot' || 'borgbot,') {
+    else if (command === 'borgbot' || 'borgbot,') {
         // console.log("borghit " + args)
-            const PROMPT = "Respond to the following prompt using only a randomly selected series of words from the following array (the response can repeat words from the array multiple times) array: [mork, Mork, MORK, borg, Barg, BARG]. Prompt: " + removeBorgbot(args)
+            const PROMPT = "Respond to the following prompt using only a randomly selected series of words from the following array (the response can repeat words from the array multiple times) array: [mork, mork, mork, mork, mork, Mork, mork Mork, MORK, borg, borg, borg, borg, borg, Barg, BARG, balg]. Prompt: " + removeBorgbot(args)
             // console.log(PROMPT + " is PROMPT");
             const raw = JSON.stringify({
                 model: "text-davinci-003",
