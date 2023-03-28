@@ -58,7 +58,7 @@ client.on('messageCreate', message => {
     }
     
     const args = message.content
-    console.log(args + " is args")
+    // console.log(args + " is args")
     const command = args.toLowerCase()
 
     if (command.includes("test")) {
@@ -76,7 +76,7 @@ client.on('messageCreate', message => {
     else if (command == 'borgbot' || 'borgbot,') {
         // console.log("borghit " + args)
             const PROMPT = "Respond to the following prompt using only a randomly selected series of words from the following array (the response can repeat words from the array multiple times) array: [mork, Mork, MORK, borg, Barg, BARG]. Prompt: " + removeBorgbot(args)
-            console.log(PROMPT + " is PROMPT");
+            // console.log(PROMPT + " is PROMPT");
             const raw = JSON.stringify({
                 model: "text-davinci-003",
                 prompt: PROMPT,
