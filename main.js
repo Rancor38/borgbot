@@ -15,6 +15,7 @@ const { convertToGold } = require("./applications/pigCoinApp")
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
+//setting a list of valid commands
 const commands = [
         "borgbot",
         "borgbot,",
@@ -24,6 +25,14 @@ const commands = [
         "pigcoins",
         "bottest",
 ]
+
+const resetPrompt = "Respond to the following prompt using only a randomly selected series of words from the following array (the response can repeat words from the array multiple times, must use complete words, and can end in an exclaimation point) array: [mork, mork, mork, mork, mork, Mork, mork Mork, MORK, borg, borg, borg, borg, borg, Barg, BARG, balg]"
+
+//setting an initial prompt
+setPrompt(
+        "prompt",
+        resetPrompt
+)
 
 const client = new Client({
         intents: [
@@ -54,54 +63,68 @@ client.on("messageCreate", (message) => {
 
         if (command.includes("bottest")) {
                 message.channel.send("Bot is working!")
-        } else if (command.includes("mork")) {
+        }
+        if (command.includes("mork")) {
                 message.channel.send("*borg*")
-        } else if (command.includes("mark")) {
+        }
+        if (command.includes("mark")) {
                 message.channel.send("*barg*")
-        } else if (command.includes("zak")) {
+        }
+        if (command.includes("zak")) {
                 message.channel.send("*balg*")
-        } else if (command.includes("pigcoins")) {
+        }
+        if (command.includes("pigcoins")) {
                 const quantity = message.content.split(" ")[1]
                 if (Number(quantity) > 0) {
                         message.channel.send(convertToGold(quantity))
                 }
                 // console.log(quantity)
-        } else if (command.includes("borgbot")) {
-                console.log(args)
-                const PROMPT =
-                        "Respond to the following prompt using only a randomly selected series of words from the following array (the response can repeat words from the array multiple times) array: [mork, mork, mork, mork, mork, Mork, mork Mork, MORK, borg, borg, borg, borg, borg, Barg, BARG, balg]"
-                console.log(PROMPT + " is PROMPT")
-                const raw = JSON.stringify({
-                        model: "text-davinci-003",
-                        prompt: PROMPT,
-                        temperature: 0.5,
-                        max_tokens: 20,
-                        n: 3,
-                })
+        }
+        if (command.includes("borgbot")) {
+                if (args.includes("love you")) {
+                        message.channel.send("I love you too, borg!")
+                } else if (args.includes("--overdrive")) {
+                        message.channel.send("**BORG BORG!!!! BORG BORG BARG!!! BORG BORG BORGBARG BARG BARG BARG!!!! BORG BORG BORG!!!! BORG BORG BORG BARG BARG BARG!!! BORG BORG BORG  BARG BARG!!!! BORG BORG BORG!! BORG BORG!!!! BORG BORG BARG!!! BORG BORG BORG BARG BORG!!!!  BARG BALG BARG BARG!!!! BORG BORG BORG!! BORG BORG!!!! BORG BORG !! BORG BORG BORG BARG! BARG BARG BARG BARG!! !! BORG BORG BARG!!! BORG BORG BORGBARG BARG BARG BARG!!!! BORG BORG BORG!!!! BORG BORG BORG BARG BARG BARG!!! BORG BORG BORG  BARG BARG!!!! BORG BORG BORG!! BORG BORG!! !! BORG BORG BARG!!! BORG BORG BORGBARG BARG BARG BARG!!!! BORG BORG BORG!!!! BORG BORG BORG BARG BARG BARG!!! BORG BORG BORG  BARG BARG!!!! BORG BORG BORG!! BORG BORG!!!! BORG BORG BARG!!! BORG BORG BORG BARG BORG!!!!  BARG BALG BARG BARG!!!! BORG BORG BORG!! BORG BORG!!!! BORG BORG !! BORG BORG BORG BARG! BARG BARG BARG BARG!! !! BORG BORG BARG!!! BORG BORG BORGBARG BARG BARG BARG!!!! BORG BORG BORG!!!! BORG BORG BORG BARG BARG BARG!!! BORG BORG BORG  BARG BARG!!!! BORG BORG BORG!! BORG BORG!!!! BORG BORG BARG!!! BORG BORG BORG BARG BORG!!!!  BARG BALG BARG BARG!!!! BORG BORG BORG!! BORG BORG!!!! BORG BORG !! BORG BORG BORG BARG! BARG BARG BARG BARG!!!! BORG BORG BORG!!! BORG BORG BORG!!! BORG BORG BARG!!! BORG BORG BORG BARG BORG!!!!  BARG BALG BARG BARG!!!! BORG BORG BORG!! BORG BORG!!!! BORG BORG !! BORG BORG BORG BARG! BARG BARG BARG BARG!!!! BORG BORG BORG!!! BORG BORG BORG!!** borg.")
+                } else {
+                        //if you use the override keyword, the prompt is set to equal the user's message with borgbot removed.
+                        if (args.includes("--override")) {
+                                setPrompt("prompt", removeBorgbot(args))
+                        }
+                        // console.log(args)
+                        // console.log(State.prompt + " is PROMPT")
+                        const raw = JSON.stringify({
+                                model: "text-davinci-003",
+                                prompt: State.prompt,
+                                temperature: 0.5,
+                                max_tokens: 50,
+                                n: 3,
+                        })
 
-                const requestOptions = {
-                        method: "POST",
-                        headers: {
-                                "Content-Type": "application/json",
-                                Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-                        },
-                        body: raw,
-                        redirect: "follow",
-                }
+                        const requestOptions = {
+                                method: "POST",
+                                headers: {
+                                        "Content-Type": "application/json",
+                                        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+                                },
+                                body: raw,
+                                redirect: "follow",
+                        }
 
-                try {
-                        fetch(
-                                "https://api.openai.com/v1/completions",
-                                requestOptions
-                        )
-                                .then((response) => response.json())
-                                .then((json) => {
-                                        message.channel.send(
-                                                json.choices[0].text
-                                        )
-                                })
-                } catch (error) {
-                        console.error(error)
+                        try {
+                                fetch(
+                                        "https://api.openai.com/v1/completions",
+                                        requestOptions
+                                )
+                                        .then((response) => response.json())
+                                        .then((json) => {
+                                                message.channel.send(
+                                                        json.choices[0].text
+                                                )
+                                        })
+                        } catch (error) {
+                                console.error(error)
+                        }
+                        setPrompt("prompt", resetPrompt)
                 }
         }
 })
