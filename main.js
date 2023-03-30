@@ -95,13 +95,13 @@ client.on("messageCreate", (message) => {
                 const rest = words.slice(1)
                 const newFood = rest.join(" ")
                 if (String(newFood)) {
-                        console.log(newFood)
+                        message.channel.send(`adding ${newFood}...`)
                         foodData.food.push(newFood)
-                        console.log(foodData.food)
+                        
                 }
                 fs.writeFile(`./data/foodData.json`, JSON.stringify(foodData), (err) => {
                         if (err) throw err;
-                        console.log('The food has been saved!')
+                        message.channel.send('Food added! mork.')
                 })
         }
         if (command.includes("removefood")) {
@@ -109,16 +109,20 @@ client.on("messageCreate", (message) => {
                 const rest = words.slice(1)
                 const remFood = rest.join(" ")
                 if (String(remFood)) {
+                        message.channel.send(`removing ${remFood}...`)
                         foodData.food = foodData.food.filter(e => e !== remFood)
-                        console.log(foodData.food)
                 }
                 fs.writeFile(`./data/foodData.json`, JSON.stringify(foodData), (err) => {
                         if (err) throw err;
-                        console.log('The food has been saved!')
+                        message.channel.send('Food removed! borg.')
                 })
         }
         if (command.includes("showfood")) {
-                message.channel.send(foodData.food.toString().replace(/,/g, ', '))
+                if (foodData.food.length > 0) {
+                        message.channel.send(foodData.food.toString().replace(/,/g, ', '))
+                } else {
+                        message.channel.send("There is no food, boss, but you could add some with 'addfood'")
+                }
         }
         if (command.includes("borgbot")) {
                 if (args.includes("love you")) {
