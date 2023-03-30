@@ -3,12 +3,16 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const app = express()
 require("dotenv").config()
+const fs = require('fs')
+const path = require('path')
 const fetch = require("node-fetch")
+const food = require("./data/foodData.json")
 const {
         includeWords,
         removeBorgbot,
         State,
         setPrompt,
+        selectRandomElement
 } = require("./lib/functions")
 const { convertToGold } = require("./applications/pigCoinApp")
 
@@ -24,7 +28,14 @@ const commands = [
         "zak",
         "pigcoins",
         "bottest",
+        "addfood",
+        "removefood",
+        "showfood",
 ]
+
+//food state
+const foodData = food
+
 
 const resetPrompt = "Respond to the following prompt using only a randomly selected series of words from the following array (the response can repeat words from the array multiple times, must use complete words, and can end in an exclaimation point) array: [mork, mork, mork, mork, mork, Mork, mork Mork, MORK, borg, borg, borg, borg, borg, Barg, BARG, balg]"
 
@@ -78,14 +89,46 @@ client.on("messageCreate", (message) => {
                 if (Number(quantity) > 0) {
                         message.channel.send(convertToGold(quantity))
                 }
-                // console.log(quantity)
+        }
+        if (command.includes("addfood")) {
+                const words = message.content.split(" ")
+                const rest = words.slice(1)
+                const newFood = rest.join(" ")
+                if (String(newFood)) {
+                        console.log(newFood)
+                        foodData.food.push(newFood)
+                        console.log(foodData.food)
+                }
+                fs.writeFile(`./data/foodData.json`, JSON.stringify(foodData), (err) => {
+                        if (err) throw err;
+                        console.log('The food has been saved!')
+                })
+        }
+        if (command.includes("removefood")) {
+                const words = message.content.split(" ")
+                const rest = words.slice(1)
+                const remFood = rest.join(" ")
+                if (String(remFood)) {
+                        foodData.food = foodData.food.filter(e => e !== remFood)
+                        console.log(foodData.food)
+                }
+                fs.writeFile(`./data/foodData.json`, JSON.stringify(foodData), (err) => {
+                        if (err) throw err;
+                        console.log('The food has been saved!')
+                })
+        }
+        if (command.includes("showfood")) {
+                message.channel.send(foodData.food.toString().replace(/,/g, ', '))
         }
         if (command.includes("borgbot")) {
                 if (args.includes("love you")) {
                         message.channel.send("I love you too, borg!")
                 } else if (args.includes("--overdrive")) {
                         message.channel.send("**BORG BORG!!!! BORG BORG BARG!!! BORG BORG BORGBARG BARG BARG BARG!!!! BORG BORG BORG!!!! BORG BORG BORG BARG BARG BARG!!! BORG BORG BORG  BARG BARG!!!! BORG BORG BORG!! BORG BORG!!!! BORG BORG BARG!!! BORG BORG BORG BARG BORG!!!!  BARG BALG BARG BARG!!!! BORG BORG BORG!! BORG BORG!!!! BORG BORG !! BORG BORG BORG BARG! BARG BARG BARG BARG!! !! BORG BORG BARG!!! BORG BORG BORGBARG BARG BARG BARG!!!! BORG BORG BORG!!!! BORG BORG BORG BARG BARG BARG!!! BORG BORG BORG  BARG BARG!!!! BORG BORG BORG!! BORG BORG!! !! BORG BORG BARG!!! BORG BORG BORGBARG BARG BARG BARG!!!! BORG BORG BORG!!!! BORG BORG BORG BARG BARG BARG!!! BORG BORG BORG  BARG BARG!!!! BORG BORG BORG!! BORG BORG!!!! BORG BORG BARG!!! BORG BORG BORG BARG BORG!!!!  BARG BALG BARG BARG!!!! BORG BORG BORG!! BORG BORG!!!! BORG BORG !! BORG BORG BORG BARG! BARG BARG BARG BARG!! !! BORG BORG BARG!!! BORG BORG BORGBARG BARG BARG BARG!!!! BORG BORG BORG!!!! BORG BORG BORG BARG BARG BARG!!! BORG BORG BORG  BARG BARG!!!! BORG BORG BORG!! BORG BORG!!!! BORG BORG BARG!!! BORG BORG BORG BARG BORG!!!!  BARG BALG BARG BARG!!!! BORG BORG BORG!! BORG BORG!!!! BORG BORG !! BORG BORG BORG BARG! BARG BARG BARG BARG!!!! BORG BORG BORG!!! BORG BORG BORG!!! BORG BORG BARG!!! BORG BORG BORG BARG BORG!!!!  BARG BALG BARG BARG!!!! BORG BORG BORG!! BORG BORG!!!! BORG BORG !! BORG BORG BORG BARG! BARG BARG BARG BARG!!!! BORG BORG BORG!!! BORG BORG BORG!!** borg.")
-                } else {
+                } else if (args.includes("--sayfood")) {  //the food function for borgbot --food
+                        const randomFood = selectRandomElement(foodData.food)
+                        message.channel.send(randomFood.toString())
+                }else {
                         //if you use the override keyword, the prompt is set to equal the user's message with borgbot removed.
                         if (args.includes("--override")) {
                                 setPrompt("prompt", removeBorgbot(args))
