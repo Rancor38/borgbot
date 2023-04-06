@@ -2,10 +2,11 @@ const { Client, Events, GatewayIntentBits } = require("discord.js")
 const express = require("express")
 const bodyParser = require("body-parser")
 const app = express()
+const cors = require('cors');
 require("dotenv").config()
 const fs = require("fs")
 const fetch = require("node-fetch")
-const { food, overdrive, help, reset, validCommands } = require("./data/index")
+const { foodData, overdrive, help, reset, validCommands } = require("./data/index")
 const {
         includeWords,
         removeBorgbot,
@@ -21,14 +22,12 @@ const { PORT } = process.env
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
+app.use(cors());
 
 app.use('/api', api)
 
 //setting a list of valid commands
 const commands = validCommands.commands
-
-//food state
-const foodData = food
 
 //setting a value to the initial prompt/reset prompt
 const resetPrompt = reset.prompt
@@ -186,4 +185,5 @@ client.on("messageCreate", (message) => {
 
 client.login(process.env.token)
 
+//app listenes for the api calls to the website
 app.listen(PORT, ()=>console.log(`the bot now listens on port: ${PORT}`))
