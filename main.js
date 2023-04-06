@@ -9,6 +9,7 @@ const fetch = require("node-fetch")
 const food = require("./data/foodData.json")
 const overdrive = require("./data/overdrive.json")
 const help = require("./data/help.json")
+const reset = require("./data/resetPrompt.json")
 const {
         includeWords,
         removeBorgbot,
@@ -38,8 +39,7 @@ const commands = [
 //food state
 const foodData = food
 
-
-const resetPrompt = "Respond to the following prompt using only a randomly selected series of words from the following array (the response can repeat words from the array multiple times, must use complete words, and can end in an exclaimation point) array: [mork, mork, mork, mork, mork, Mork, mork Mork, MORK, borg, borg, borg, borg, borg, Barg, BARG, balg]"
+const resetPrompt = reset.prompt
 
 //setting an initial prompt
 setPrompt(
