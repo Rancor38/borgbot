@@ -1,12 +1,11 @@
-const { Client, Events, GatewayIntentBits, Application } = require("discord.js")
+const { Client, Events, GatewayIntentBits } = require("discord.js")
 const express = require("express")
 const bodyParser = require("body-parser")
 const app = express()
 require("dotenv").config()
 const fs = require('fs')
-const path = require('path')
 const fetch = require("node-fetch")
-const { food, overdrive, help, reset } = require("./data/index")
+const { food, overdrive, help, reset, validCommands } = require("./data/index")
 const {
         includeWords,
         removeBorgbot,
@@ -20,18 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 //setting a list of valid commands
-const commands = [
-        "borgbot",
-        "borgbot,",
-        "mork",
-        "mark",
-        "zak",
-        "pigcoins",
-        "bottest",
-        "addfood",
-        "removefood",
-        "showfood",
-]
+const commands = validCommands.commands
 
 //food state
 const foodData = food
