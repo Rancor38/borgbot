@@ -37,7 +37,6 @@ const commands = [
 
 //food state
 const foodData = food
-console.log(help.message)
 
 
 const resetPrompt = "Respond to the following prompt using only a randomly selected series of words from the following array (the response can repeat words from the array multiple times, must use complete words, and can end in an exclaimation point) array: [mork, mork, mork, mork, mork, Mork, mork Mork, MORK, borg, borg, borg, borg, borg, Barg, BARG, balg]"
