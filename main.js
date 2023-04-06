@@ -6,10 +6,7 @@ require("dotenv").config()
 const fs = require('fs')
 const path = require('path')
 const fetch = require("node-fetch")
-const food = require("./data/foodData.json")
-const overdrive = require("./data/overdrive.json")
-const help = require("./data/help.json")
-const reset = require("./data/resetPrompt.json")
+const { food, overdrive, help, reset } = require("./data/index")
 const {
         includeWords,
         removeBorgbot,
