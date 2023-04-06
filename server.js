@@ -3,7 +3,7 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const app = express()
 require("dotenv").config()
-const fs = require('fs')
+const fs = require("fs")
 const fetch = require("node-fetch")
 const { food, overdrive, help, reset, validCommands } = require("./data/index")
 const {
@@ -11,12 +11,18 @@ const {
         removeBorgbot,
         State,
         setPrompt,
-        selectRandomElement
+        selectRandomElement,
 } = require("./lib/functions")
 const { convertToGold } = require("./applications/pigCoinApp")
+const api = require("./applications/api")
+
+//set a port for the api
+const { PORT } = process.env
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
+
+app.use('/api', api)
 
 //setting a list of valid commands
 const commands = validCommands.commands
@@ -24,13 +30,11 @@ const commands = validCommands.commands
 //food state
 const foodData = food
 
+//setting a value to the initial prompt/reset prompt
 const resetPrompt = reset.prompt
 
 //setting an initial prompt
-setPrompt(
-        "prompt",
-        resetPrompt
-)
+setPrompt("prompt", resetPrompt)
 
 const client = new Client({
         intents: [
@@ -42,7 +46,7 @@ const client = new Client({
 })
 
 client.once(Events.ClientReady, () => {
-        console.log("Borgbot is ready, firing on all cylinders, Brrrrrrrr!")
+        console.log("Borgbot is ready for Discord, firing on all cylinders, Brrrrrrrr!")
 })
 
 client.on("messageCreate", (message) => {
@@ -84,12 +88,15 @@ client.on("messageCreate", (message) => {
                 if (String(newFood)) {
                         message.channel.send(`adding ${newFood}...`)
                         foodData.food.push(newFood)
-                        
                 }
-                fs.writeFile(`./data/foodData.json`, JSON.stringify(foodData), (err) => {
-                        if (err) throw err;
-                        message.channel.send('Food added! mork.')
-                })
+                fs.writeFile(
+                        `./data/foodData.json`,
+                        JSON.stringify(foodData),
+                        (err) => {
+                                if (err) throw err
+                                message.channel.send("Food added! mork.")
+                        }
+                )
         }
         if (command.includes("removefood")) {
                 const words = message.content.split(" ")
@@ -97,18 +104,28 @@ client.on("messageCreate", (message) => {
                 const remFood = rest.join(" ")
                 if (String(remFood)) {
                         message.channel.send(`removing ${remFood}...`)
-                        foodData.food = foodData.food.filter(e => e !== remFood)
+                        foodData.food = foodData.food.filter(
+                                (e) => e !== remFood
+                        )
                 }
-                fs.writeFile(`./data/foodData.json`, JSON.stringify(foodData), (err) => {
-                        if (err) throw err;
-                        message.channel.send('Food removed! borg.')
-                })
+                fs.writeFile(
+                        `./data/foodData.json`,
+                        JSON.stringify(foodData),
+                        (err) => {
+                                if (err) throw err
+                                message.channel.send("Food removed! borg.")
+                        }
+                )
         }
         if (command.includes("showfood")) {
                 if (foodData.food.length > 0) {
-                        message.channel.send(foodData.food.toString().replace(/,/g, ', '))
+                        message.channel.send(
+                                foodData.food.toString().replace(/,/g, ", ")
+                        )
                 } else {
-                        message.channel.send("There is no food, boss, but you could add some with 'addfood'")
+                        message.channel.send(
+                                "There is no food, boss, but you could add some with 'addfood'"
+                        )
                 }
         }
         if (command.includes("borgbot")) {
@@ -116,13 +133,14 @@ client.on("messageCreate", (message) => {
                         message.channel.send("I love you too, borg!")
                 } else if (args.includes("--overdrive")) {
                         message.channel.send(overdrive.message)
-                } else if (args.includes("--sayfood")) {  //the food function for borgbot --food
+                } else if (args.includes("--sayfood")) {
+                        //the food function for borgbot --food
                         const randomFood = selectRandomElement(foodData.food)
                         message.channel.send(randomFood.toString())
-                } else if (args.includes("--help")) { //the help function to list current commands
+                } else if (args.includes("--help")) {
+                        //the help function to list current commands
                         message.channel.send(help.message)
-                } 
-                else {
+                } else {
                         //if you use the override keyword, the prompt is set to equal the user's message with borgbot removed.
                         if (args.includes("--override")) {
                                 setPrompt("prompt", removeBorgbot(args))
@@ -167,3 +185,5 @@ client.on("messageCreate", (message) => {
 })
 
 client.login(process.env.token)
+
+app.listen(PORT, ()=>console.log(`the bot now listens on port: ${PORT}`))
