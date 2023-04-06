@@ -7,6 +7,8 @@ const fs = require('fs')
 const path = require('path')
 const fetch = require("node-fetch")
 const food = require("./data/foodData.json")
+const overdrive = require("./data/overdrive.json")
+const help = require("./data/help.json")
 const {
         includeWords,
         removeBorgbot,
@@ -35,6 +37,7 @@ const commands = [
 
 //food state
 const foodData = food
+console.log(help.message)
 
 
 const resetPrompt = "Respond to the following prompt using only a randomly selected series of words from the following array (the response can repeat words from the array multiple times, must use complete words, and can end in an exclaimation point) array: [mork, mork, mork, mork, mork, Mork, mork Mork, MORK, borg, borg, borg, borg, borg, Barg, BARG, balg]"
@@ -128,11 +131,14 @@ client.on("messageCreate", (message) => {
                 if (args.includes("love you")) {
                         message.channel.send("I love you too, borg!")
                 } else if (args.includes("--overdrive")) {
-                        message.channel.send("**BORG BORG!!!! BORG BORG BARG!!! BORG BORG BORGBARG BARG BARG BARG!!!! BORG BORG BORG!!!! BORG BORG BORG BARG BARG BARG!!! BORG BORG BORG  BARG BARG!!!! BORG BORG BORG!! BORG BORG!!!! BORG BORG BARG!!! BORG BORG BORG BARG BORG!!!!  BARG BALG BARG BARG!!!! BORG BORG BORG!! BORG BORG!!!! BORG BORG !! BORG BORG BORG BARG! BARG BARG BARG BARG!! !! BORG BORG BARG!!! BORG BORG BORGBARG BARG BARG BARG!!!! BORG BORG BORG!!!! BORG BORG BORG BARG BARG BARG!!! BORG BORG BORG  BARG BARG!!!! BORG BORG BORG!! BORG BORG!! !! BORG BORG BARG!!! BORG BORG BORGBARG BARG BARG BARG!!!! BORG BORG BORG!!!! BORG BORG BORG BARG BARG BARG!!! BORG BORG BORG  BARG BARG!!!! BORG BORG BORG!! BORG BORG!!!! BORG BORG BARG!!! BORG BORG BORG BARG BORG!!!!  BARG BALG BARG BARG!!!! BORG BORG BORG!! BORG BORG!!!! BORG BORG !! BORG BORG BORG BARG! BARG BARG BARG BARG!! !! BORG BORG BARG!!! BORG BORG BORGBARG BARG BARG BARG!!!! BORG BORG BORG!!!! BORG BORG BORG BARG BARG BARG!!! BORG BORG BORG  BARG BARG!!!! BORG BORG BORG!! BORG BORG!!!! BORG BORG BARG!!! BORG BORG BORG BARG BORG!!!!  BARG BALG BARG BARG!!!! BORG BORG BORG!! BORG BORG!!!! BORG BORG !! BORG BORG BORG BARG! BARG BARG BARG BARG!!!! BORG BORG BORG!!! BORG BORG BORG!!! BORG BORG BARG!!! BORG BORG BORG BARG BORG!!!!  BARG BALG BARG BARG!!!! BORG BORG BORG!! BORG BORG!!!! BORG BORG !! BORG BORG BORG BARG! BARG BARG BARG BARG!!!! BORG BORG BORG!!! BORG BORG BORG!!** borg.")
+                        message.channel.send(overdrive.message)
                 } else if (args.includes("--sayfood")) {  //the food function for borgbot --food
                         const randomFood = selectRandomElement(foodData.food)
                         message.channel.send(randomFood.toString())
-                }else {
+                } else if (args.includes("--help")) { //the help function to list current commands
+                        message.channel.send(help.message)
+                } 
+                else {
                         //if you use the override keyword, the prompt is set to equal the user's message with borgbot removed.
                         if (args.includes("--override")) {
                                 setPrompt("prompt", removeBorgbot(args))

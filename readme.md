@@ -14,3 +14,4 @@ If you say "pigcoins" followed by a number, it will turn that number into a valu
 If you say "borgbot" + "--overdrive" the borgbot will kick it into overdrive.  
 If you say "borgbot" + "--override" the borgbot will become sentient.  
 If you say "borgbot" + "--sayfood" the borgbot will respond with a random food place from his list.  
+If you say "borgbot" + "--help" the borgbot will respond this help message.  
