@@ -8,6 +8,7 @@ const {
         setPrompt,
         State,
         removeBorgbot,
+        selectRandomElement,
 } = require("../lib/functions")
 
 /*NOTES TO FUTURE DEV, repetitious code for handling commands here in need of a refactor, however, for now the message is the title of the response object ot make it look symantically similar to the server.js, but note that the word "channel" is removed from message.channel.send, and replaced with message.send (and eventually message.json)*/
@@ -22,10 +23,10 @@ const resetPrompt = reset.prompt
 setPrompt("prompt", resetPrompt)
 
 router.post("/", async (req, message) => {
+        const args = req.body.message
+        const command = args.toLowerCase()
         if (includeWords(req.body.message, commands)) {
-                const args = req.body.message
 
-                const command = args.toLowerCase()
 
                 if (command.includes("mork")) {
                         message.send("borg")
@@ -35,66 +36,6 @@ router.post("/", async (req, message) => {
                 }
                 if (command.includes("zak")) {
                         message.send("balg")
-                }
-                if (command.includes("borgbot")) {
-                        if (args.includes("love you")) {
-                                message.send("I love you too, borg!")
-                        } else if (args.includes("--overdrive")) {
-                                message.send(overdrive.message)
-                        } else if (args.includes("--sayfood")) {
-                                //the food function for borgbot --food
-                                const randomFood = selectRandomElement(
-                                        foodData.food
-                                )
-                                message.send(randomFood.toString())
-                        } else if (args.includes("--help")) {
-                                //the help function to list current commands
-                                message.send(help.message)
-                        } else {
-                                //if you use the override keyword, the prompt is set to equal the user's message with borgbot removed.
-                                if (args.includes("--override")) {
-                                        setPrompt("prompt", removeBorgbot(args))
-                                }
-                                // console.log(args)
-                                // console.log(State.prompt + " is PROMPT")
-                                const raw = JSON.stringify({
-                                        model: "text-davinci-003",
-                                        prompt: State.prompt,
-                                        temperature: 0.5,
-                                        max_tokens: 50,
-                                        n: 3,
-                                })
-
-                                const requestOptions = {
-                                        method: "POST",
-                                        headers: {
-                                                "Content-Type":
-                                                        "application/json",
-                                                Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-                                        },
-                                        body: raw,
-                                        redirect: "follow",
-                                }
-
-                                try {
-                                        fetch(
-                                                "https://api.openai.com/v1/completions",
-                                                requestOptions
-                                        )
-                                                .then((response) =>
-                                                        response.json()
-                                                )
-                                                .then((json) => {
-                                                        message.send(
-                                                                json.choices[0]
-                                                                        .text
-                                                        )
-                                                })
-                                } catch (error) {
-                                        console.error(error)
-                                }
-                                setPrompt("prompt", resetPrompt)
-                        }
                 }
                 if (command.includes("pigcoins")) {
                         const quantity = command.split(" ")[1]
@@ -132,7 +73,8 @@ router.post("/", async (req, message) => {
                                 )
                         }
                         fs.writeFile(
-                                `../data/foodData.json`,
+                                `../data/foodData.json
+                                `,
                                 JSON.stringify(foodData),
                                 (err) => {
                                         if (err) throw err
@@ -155,6 +97,68 @@ router.post("/", async (req, message) => {
                                 )
                         }
                 }
+        } else {
+                if (args.includes("love you")) {
+                        message.send("I love you too, borg!")
+                        return
+                } else if (args.includes("--overdrive")) {
+                        message.send(overdrive.message)
+                        return
+                } else if (args.includes("--sayfood")) {
+                        //the food function for borgbot --food
+                        const randomFood = selectRandomElement(
+                                foodData.food
+                        )
+                        message.send(randomFood.toString())
+                        return
+                } else if (args.includes("--help")) {
+                        //the help function to list current commands
+                        message.send(help.message)
+                        return
+                } 
+                //if you use the override keyword, the prompt is set to equal the user's message with borgbot removed.
+                else if (args.includes("--override")) {
+                        setPrompt("prompt", removeBorgbot(args))
+                }
+                // console.log(args)
+                // console.log(State.prompt + " is PROMPT")
+                const raw = JSON.stringify({
+                        model: "text-davinci-003",
+                        prompt: State.prompt,
+                        temperature: 0.5,
+                        max_tokens: 50,
+                        n: 3,
+                })
+
+                const requestOptions = {
+                        method: "POST",
+                        headers: {
+                                "Content-Type":
+                                        "application/json",
+                                Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+                        },
+                        body: raw,
+                        redirect: "follow",
+                }
+
+                try {
+                        fetch(
+                                "https://api.openai.com/v1/completions",
+                                requestOptions
+                        )
+                                .then((response) =>
+                                        response.json()
+                                )
+                                .then((json) => {
+                                        message.send(
+                                                json.choices[0]
+                                                        .text
+                                        )
+                                })
+                } catch (error) {
+                        console.error(error)
+                }
+                setPrompt("prompt", resetPrompt)
         }
 })
 
