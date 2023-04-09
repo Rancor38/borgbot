@@ -25,6 +25,7 @@ app.use(bodyParser.json())
 app.use(cors());
 
 app.use('/api', api)
+app.redirect('/', '/api')
 
 //setting a list of valid commands
 const commands = validCommands.commands

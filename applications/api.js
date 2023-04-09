@@ -22,6 +22,10 @@ const resetPrompt = reset.prompt
 //setting an initial prompt
 setPrompt("prompt", resetPrompt)
 
+router.get("/", (req, res) => {
+        res.send("api is working")
+})
+
 router.post("/", async (req, message) => {
         const args = req.body.message
         const command = args.toLowerCase()
