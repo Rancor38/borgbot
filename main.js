@@ -24,8 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(cors());
 
-app.use('/api', api)
-app.redirect('/', '/api')
+app.use('/', api)
 
 //setting a list of valid commands
 const commands = validCommands.commands
