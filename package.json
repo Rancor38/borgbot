@@ -2,9 +2,9 @@
   "name": "discord-bot",
   "version": "1.0.0",
   "description": "this is a template for creating discord bots",
-  "main": "server.js",
+  "main": "main.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node main.js"
   },
   "author": "Zakariah",
   "license": "ISC",
