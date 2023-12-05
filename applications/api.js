@@ -127,7 +127,7 @@ router.post("/", async (req, message) => {
                 // console.log(args)
                 // console.log(State.prompt + " is PROMPT")
                 const raw = JSON.stringify({
-                        model: "text-davinci-003",
+                        model: "gpt-3.5-turbo-instruct",
                         prompt: State.prompt,
                         temperature: 0.5,
                         max_tokens: 50,
