@@ -1,7 +1,10 @@
 const { Client, Events, GatewayIntentBits } = require("discord.js")
-const express = require("express")
 const bodyParser = require("body-parser")
-const app = express()
+const express = require('express');
+const axios = require('axios');
+require('dotenv').config();
+const app = express();
+app.use(express.json());
 const cors = require('cors');
 require("dotenv").config()
 const fs = require("fs")
@@ -48,7 +51,7 @@ client.once(Events.ClientReady, () => {
         console.log("Borgbot is ready for Discord, firing on all cylinders, Brrrrrrrr!")
 })
 
-client.on("messageCreate", (message) => {
+client.on("messageCreate", async (message) => {
         //if the bot wrote the message, ignore
         if (message.author.bot) {
                 return
@@ -144,44 +147,32 @@ client.on("messageCreate", (message) => {
                         if (args.includes("--override")) {
                                 setPrompt("prompt", removeBorgbot(args))
                         }
-                        // console.log(args)
-                        // console.log(State.prompt + " is PROMPT")
-                        const raw = JSON.stringify({
-                                model: "text-davinci-003",
-                                prompt: State.prompt,
-                                temperature: 0.5,
-                                max_tokens: 50,
-                                n: 3,
-                        })
-
-                        const requestOptions = {
-                                method: "POST",
-                                headers: {
-                                        "Content-Type": "application/json",
-                                        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-                                },
-                                body: raw,
-                                redirect: "follow",
-                        }
-
+                        const openaiApiKey = process.env.OPENAI_API_KEY;
                         try {
-                                fetch(
-                                        "https://api.openai.com/v1/completions",
-                                        requestOptions
-                                )
-                                        .then((response) => response.json())
-                                        .then((json) => {
-                                                message.channel.send(
-                                                        json.choices[0].text
-                                                )
-                                        })
-                        } catch (error) {
-                                console.error(error)
+                                const completion = await axios.post(
+                                    'https://api.openai.com/v1/chat/completions',
+                                    {
+                                        messages: [{ role: 'system', content: `${State.prompt}` }, { role: 'user', content: message.content}],
+                                        model: 'gpt-3.5-turbo',
+                                    },
+                                    {
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Authorization': `Bearer ${openaiApiKey}`, 
+                                        },
+                                    }
+                                );
+                    
+                                console.log(completion.data.choices[0]);
+                                message.channel.send(completion.data.choices[0].message.content); // Sending the response back as a Discord message
+                            } catch (error) {
+                                console.error(error);
+                                message.channel.send("Internal Server Error, I'm borked.");
+                            }
                         }
                         setPrompt("prompt", resetPrompt)
                 }
-        }
-})
+        })
 
 client.login(process.env.token)
 
