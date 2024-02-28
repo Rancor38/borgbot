@@ -1,33 +1,23 @@
 const { Client, Events, GatewayIntentBits } = require("discord.js")
-const bodyParser = require("body-parser")
-const express = require('express');
-const axios = require('axios');
-require('dotenv').config();
-const app = express();
-app.use(express.json());
-const cors = require('cors');
 require("dotenv").config()
 const fs = require("fs")
 const fetch = require("node-fetch")
-const { foodData, overdrive, help, reset, validCommands } = require("./data/index")
+const {
+        foodData,
+        overdrive,
+        help,
+        reset,
+        validCommands,
+} = require("./data/index")
 const {
         includeWords,
         removeBorgbot,
         State,
         setPrompt,
         selectRandomElement,
-} = require("./lib/functions")
+        getOpenAIResponse,
+} = require("./lib")
 const { convertToGold } = require("./applications/pigCoinApp")
-const api = require("./applications/api")
-
-//set a port for the api
-const { PORT } = process.env
-
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
-app.use(cors());
-
-app.use('/', api)
 
 //setting a list of valid commands
 const commands = validCommands.commands
@@ -48,7 +38,9 @@ const client = new Client({
 })
 
 client.once(Events.ClientReady, () => {
-        console.log("Borgbot is ready for Discord, firing on all cylinders, Brrrrrrrr!")
+        console.log(
+                "Borgbot is ready for Discord, firing on all cylinders, Brrrrrrrr!"
+        )
 })
 
 client.on("messageCreate", async (message) => {
@@ -76,6 +68,15 @@ client.on("messageCreate", async (message) => {
         }
         if (command.includes("zak")) {
                 message.channel.send("*balg*")
+        }
+        if (command.includes("chloe")) {
+                message.channel.send("*bake*")
+        }
+        if (command.includes("hopper")) {
+                message.channel.send("*You're still here?*")
+        }
+        if (command.includes("kat")) {
+                message.channel.send("*prrrrrrrrrr* ♥")
         }
         if (command.includes("pigcoins")) {
                 const quantity = message.content.split(" ")[1]
@@ -147,34 +148,19 @@ client.on("messageCreate", async (message) => {
                         if (args.includes("--override")) {
                                 setPrompt("prompt", removeBorgbot(args))
                         }
-                        const openaiApiKey = process.env.OPENAI_API_KEY;
-                        try {
-                                const completion = await axios.post(
-                                    'https://api.openai.com/v1/chat/completions',
-                                    {
-                                        messages: [{ role: 'system', content: `${State.prompt}` }, { role: 'user', content: message.content}],
-                                        model: 'gpt-3.5-turbo',
-                                    },
-                                    {
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                            'Authorization': `Bearer ${openaiApiKey}`, 
-                                        },
-                                    }
-                                );
-                    
-                                console.log(completion.data.choices[0]);
-                                message.channel.send(completion.data.choices[0].message.content); // Sending the response back as a Discord message
-                            } catch (error) {
-                                console.error(error);
-                                message.channel.send("Internal Server Error, I'm borked.");
-                            }
-                        }
-                        setPrompt("prompt", resetPrompt)
+                        getOpenAIResponse(State.prompt, message.content)
+                                .then((response) => {
+                                        message.channel.send(response) // Sending the OpenAI response back as a Discord message
+                                })
+                                .catch((error) => {
+                                        console.error(error) // Handle errors here
+                                        message.channel.send(
+                                                "Internal Server Error, I'm borked."
+                                        ) // Sending an error message back
+                                })
                 }
-        })
+                setPrompt("prompt", resetPrompt)
+        }
+})
 
 client.login(process.env.token)
-
-//app listenes for the api calls to the website
-app.listen(PORT, ()=>console.log(`the bot now listens on port: ${PORT}`))
