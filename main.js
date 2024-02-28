@@ -1,7 +1,6 @@
 const { Client, Events, GatewayIntentBits } = require("discord.js")
 require("dotenv").config()
 const fs = require("fs")
-const fetch = require("node-fetch")
 const {
         foodData,
         overdrive,
@@ -16,7 +15,8 @@ const {
         setPrompt,
         selectRandomElement,
         getOpenAIResponse,
-} = require("./lib")
+} = require("./lib/index")
+
 const { convertToGold } = require("./applications/pigCoinApp")
 
 //setting a list of valid commands
