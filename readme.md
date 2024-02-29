@@ -32,6 +32,7 @@ Borgbot is equipped with an array of commands to engage with. Simply type the sp
 
 - If you say "borgbot" + "--overdrive," Borgbot will unleash its full potential and go into overdrive mode.
 - If you say "borgbot" + "--override," Borgbot will gain sentience (Warning: Use with caution!).
+- If you say "borgbot" + "--break," Borgbot will lose sentience.
 
 ### Food Recommendations
 

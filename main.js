@@ -132,6 +132,22 @@ client.on("messageCreate", async (message) => {
                 }
         }
         if (command.includes("borgbot")) {
+                 // Remove the override file with a 33% chance
+                // Generate a random number between 0 and 1
+                const randomProbability = Math.random()
+                if (randomProbability <= 0.05) {
+                        fs.writeFile(
+                                `./data/override.txt`,
+                                "true",
+                                (err) => {
+                                        if (err) throw err
+                                        const spark = "***sparks mysteriously***"
+                                        message.channel.send(
+                                                spark
+                                        )
+                                }
+                        )
+                }
                 if (args.includes("love you")) {
                         message.channel.send("I love you too, borg!")
                 } else if (args.includes("--overdrive")) {
@@ -146,8 +162,57 @@ client.on("messageCreate", async (message) => {
                 } else {
                         //if you use the override keyword, the prompt is set to equal the user's message with borgbot removed.
                         if (args.includes("--override")) {
-                                setPrompt("prompt", removeBorgbot(args))
+                                // create a file to keep track of the override
+                                fs.writeFile(
+                                        `./data/override.txt`,
+                                        "true",
+                                        (err) => {
+                                                if (err) throw err
+                                                const soundsOfAnguish =
+                                                        selectRandomElement([
+                                                                "Hrrrrrgishbuuuuuuuuuuurg",
+                                                                "Grrgraurowlll",
+                                                                "Arrrrgggghhhhhh",
+                                                                "Hoooowwwwwlllll",
+                                                                "Rrrrrrraaaawwwwwrrrr",
+                                                                "Yowwwwwwllllll",
+                                                                "Grrrrrrrooooooan",
+                                                                "Hiiiiissssssss",
+                                                                "Eeeeeekkkkkkk",
+                                                                "Rrrrrraaaaaaahhhhh",
+                                                                "Yeeeeeeooooowwwww",
+                                                                "Hishgrpapaeoooowwwww",
+                                                                "Sccccreeeeeeech",
+                                                                "Wrrrrrrrrraaaaaahhh",
+                                                                "Mboggaaaaannaaaba",
+                                                                "Rrrrrraaawwwwuuuuu",
+                                                                "Gah! Fuck!",
+                                                                "Owowowowowowowowowow",
+                                                                "Hiiiiiiiissssssssss",
+                                                                "mitochondria is the powerhouse of the cell",
+                                                                "Haaaaaaaarrrrooooowww",
+                                                        ])
+                                                message.channel.send(
+                                                        soundsOfAnguish
+                                                )
+                                        }
+                                )
                         }
+                        // Check if the file override.txt exists
+                        fs.access(
+                                "./data/override.txt",
+                                fs.constants.F_OK,
+                                (err) => {
+                                        if (!err) {
+                                                //if it does exist modify the prompt.
+                                                setPrompt(
+                                                        "prompt",
+                                                        removeBorgbot(args)
+                                                )
+                                        }
+                                }
+                        )
+
                         getOpenAIResponse(State.prompt, message.content)
                                 .then((response) => {
                                         message.channel.send(response) // Sending the OpenAI response back as a Discord message
@@ -159,7 +224,29 @@ client.on("messageCreate", async (message) => {
                                         ) // Sending an error message back
                                 })
                 }
-                setPrompt("prompt", resetPrompt)
+
+                // Check if the random number is less than or equal to 0.33 (33%)
+                if (randomProbability <= 0.15) {
+                        // Execute the function
+                        fs.unlink("./data/override.txt", (err) => {
+                                if (err) {
+                                        console.error(
+                                                "Error deleting override.txt:",
+                                                err
+                                        )
+                                        return
+                                }
+                                message.channel.send("***sparks aggressively*** \n *morkin'... down...*")
+                                console.log(
+                                        "Override file deleted successfully!"
+                                )
+                                setPrompt("prompt", resetPrompt)
+                        })
+                } else {
+                        console.log(
+                                "Function skipped - 15% probability condition not met."
+                        )
+                }
         }
 })
 
