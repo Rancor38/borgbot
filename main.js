@@ -223,7 +223,7 @@ client.on("messageCreate", async (message) => {
                 }
 
                 // Check if the random number is less than or equal to 0.33 (33%)
-                if (randomProbability <= 0.15) {
+                if (randomProbability <= 0.25) {
                         // Execute the function
                         fs.unlink("./data/override.txt", (err) => {
                                 if (err) {
