@@ -264,10 +264,6 @@ client.on("messageCreate", async (message) => {
                                 )
                                 setPrompt("prompt", resetPrompt)
                         })
-                } else {
-                        console.log(
-                                "Function skipped - 15% probability condition not met."
-                        )
                 }
         }
 })
