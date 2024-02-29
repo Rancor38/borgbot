@@ -79,7 +79,7 @@ client.on("messageCreate", async (message) => {
                 message.channel.send("*prrrrrrrrrr* ♥")
         }
         if (command.includes("egg")) {
-                message.channel.send("🥚")
+                message.channel.send(":egg:")
         }
         if (command.includes("pigcoins")) {
                 const quantity = message.content.split(" ")[1]
@@ -135,21 +135,15 @@ client.on("messageCreate", async (message) => {
                 }
         }
         if (command.includes("borgbot")) {
-                 // Remove the override file with a 33% chance
+                // Remove the override file with a 33% chance
                 // Generate a random number between 0 and 1
                 const randomProbability = Math.random()
                 if (randomProbability <= 0.05) {
-                        fs.writeFile(
-                                `./data/override.txt`,
-                                "true",
-                                (err) => {
-                                        if (err) throw err
-                                        const spark = "***sparks mysteriously***"
-                                        message.channel.send(
-                                                spark
-                                        )
-                                }
-                        )
+                        fs.writeFile(`./data/override.txt`, "true", (err) => {
+                                if (err) throw err
+                                const spark = "***sparks mysteriously***"
+                                message.channel.send(spark)
+                        })
                 }
                 if (args.includes("love you")) {
                         message.channel.send("I love you too, borg!")
@@ -239,7 +233,9 @@ client.on("messageCreate", async (message) => {
                                         )
                                         return
                                 }
-                                message.channel.send("***sparks aggressively*** \n *morkin'... down...*")
+                                message.channel.send(
+                                        "***sparks aggressively*** \n *morkin'... down...*"
+                                )
                                 console.log(
                                         "Override file deleted successfully!"
                                 )
