@@ -156,6 +156,24 @@ client.on("messageCreate", async (message) => {
                 } else if (args.includes("--help")) {
                         //the help function to list current commands
                         message.channel.send(help.message)
+                } else if (args.includes("--throwwrench")) {
+                        // Execute the function
+                        fs.unlink("./data/override.txt", (err) => {
+                                if (err) {
+                                        console.error(
+                                                "Error deleting override.txt:",
+                                                err
+                                        )
+                                        return
+                                }
+                                message.channel.send(
+                                        "***sparks aggressively*** \n *morkin'... down...*"
+                                )
+                                console.log(
+                                        "Override file deleted successfully!"
+                                )
+                                setPrompt("prompt", resetPrompt)
+                        })
                 } else {
                         //if you use the override keyword, the prompt is set to equal the user's message with borgbot removed.
                         if (args.includes("--override")) {
@@ -165,6 +183,10 @@ client.on("messageCreate", async (message) => {
                                         "true",
                                         (err) => {
                                                 if (err) throw err
+                                                setPrompt(
+                                                        "prompt",
+                                                        removeBorgbot(args)
+                                                )
                                                 const soundsOfAnguish =
                                                         selectRandomElement([
                                                                 "Hrrrrrgishbuuuuuuuuuuurg",
@@ -188,6 +210,7 @@ client.on("messageCreate", async (message) => {
                                                                 "Hiiiiiiiissssssssss",
                                                                 "mitochondria is the powerhouse of the cell",
                                                                 "Haaaaaaaarrrrooooowww",
+                                                                "GOOOOOOOD MORNING VIETNAM!"
                                                         ])
                                                 message.channel.send(
                                                         soundsOfAnguish
