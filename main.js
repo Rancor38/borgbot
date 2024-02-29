@@ -78,6 +78,9 @@ client.on("messageCreate", async (message) => {
         if (command.includes("kat")) {
                 message.channel.send("*prrrrrrrrrr* ♥")
         }
+        if (command.includes("egg")) {
+                message.channel.send("🥚")
+        }
         if (command.includes("pigcoins")) {
                 const quantity = message.content.split(" ")[1]
                 if (Number(quantity) > 0) {
