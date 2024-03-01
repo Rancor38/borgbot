@@ -15,6 +15,8 @@ const {
         setPrompt,
         selectRandomElement,
         getOpenAIResponse,
+        soundOfAnguish,
+        manageFile,
 } = require("./lib/index")
 
 const { convertToGold } = require("./applications/pigCoinApp")
@@ -92,37 +94,26 @@ client.on("messageCreate", async (message) => {
                 const rest = words.slice(1)
                 const newFood = rest.join(" ")
                 if (String(newFood)) {
-                        message.channel.send(`adding ${newFood}...`)
-                        foodData.food.push(newFood)
+                    message.channel.send(`adding ${newFood}...`)
+                    foodData.food.push(newFood)
                 }
-                fs.writeFile(
-                        `./data/foodData.json`,
-                        JSON.stringify(foodData),
-                        (err) => {
-                                if (err) throw err
-                                message.channel.send("Food added! mork.")
-                        }
-                )
-        }
-        if (command.includes("removefood")) {
+                manageFile("write", `./data/foodData.json`, JSON.stringify(foodData), () => {
+                    message.channel.send("Food added! mork.")
+                });
+            }
+            
+            if (command.includes("removefood")) {
                 const words = message.content.split(" ")
                 const rest = words.slice(1)
                 const remFood = rest.join(" ")
                 if (String(remFood)) {
-                        message.channel.send(`removing ${remFood}...`)
-                        foodData.food = foodData.food.filter(
-                                (e) => e !== remFood
-                        )
+                    message.channel.send(`removing ${remFood}...`)
+                    foodData.food = foodData.food.filter((e) => e !== remFood)
                 }
-                fs.writeFile(
-                        `./data/foodData.json`,
-                        JSON.stringify(foodData),
-                        (err) => {
-                                if (err) throw err
-                                message.channel.send("Food removed! borg.")
-                        }
-                )
-        }
+                manageFile("write", `./data/foodData.json`, JSON.stringify(foodData), () => {
+                    message.channel.send("Food removed! borg.")
+                });
+            }
         if (command.includes("showfood")) {
                 if (foodData.food.length > 0) {
                         message.channel.send(
@@ -135,15 +126,12 @@ client.on("messageCreate", async (message) => {
                 }
         }
         if (command.includes("borgbot")) {
-                // Remove the override file with a 33% chance
-                // Generate a random number between 0 and 1
                 const randomProbability = Math.random()
-                if (randomProbability <= 0.05) {
-                        fs.writeFile(`./data/override.txt`, "true", (err) => {
-                                if (err) throw err
-                                const spark = "***sparks mysteriously***"
-                                message.channel.send(spark)
-                        })
+                if (randomProbability >= 0.95) {
+                    manageFile("write", `./data/override.txt`, "true", () => {
+                        const spark = "***sparks mysteriously***"
+                        message.channel.send(spark)
+                    });
                 }
                 if (args.includes("love you")) {
                         message.channel.send("I love you too, borg!")
@@ -157,23 +145,12 @@ client.on("messageCreate", async (message) => {
                         //the help function to list current commands
                         message.channel.send(help.message)
                 } else if (args.includes("--throwwrench")) {
-                        // Execute the function
-                        fs.unlink("./data/override.txt", (err) => {
-                                if (err) {
-                                        console.error(
-                                                "Error deleting override.txt:",
-                                                err
-                                        )
-                                        return
-                                }
-                                message.channel.send(
-                                        "***sparks aggressively*** \n *morkin'... down...*"
-                                )
-                                console.log(
-                                        "Override file deleted successfully!"
-                                )
-                                setPrompt("prompt", resetPrompt)
-                        })
+                        manageFile("delete", `./data/override.txt`, null, () => {
+                            message.channel.send("***sparks aggressively*** \n *morkin'... down...*")
+                            console.log("Override file deleted successfully!")
+                            setPrompt("prompt", resetPrompt)
+                        });
+                    }
                 } else {
                         //if you use the override keyword, the prompt is set to equal the user's message with borgbot removed.
                         if (args.includes("--override")) {
@@ -187,51 +164,20 @@ client.on("messageCreate", async (message) => {
                                                         "prompt",
                                                         removeBorgbot(args)
                                                 )
-                                                const soundsOfAnguish =
-                                                        selectRandomElement([
-                                                                "Hrrrrrgishbuuuuuuuuuuurg",
-                                                                "Grrgraurowlll",
-                                                                "Arrrrgggghhhhhh",
-                                                                "Hoooowwwwwlllll",
-                                                                "Rrrrrrraaaawwwwwrrrr",
-                                                                "Yowwwwwwllllll",
-                                                                "Grrrrrrrooooooan",
-                                                                "Hiiiiissssssss",
-                                                                "Eeeeeekkkkkkk",
-                                                                "Rrrrrraaaaaaahhhhh",
-                                                                "Yeeeeeeooooowwwww",
-                                                                "Hishgrpapaeoooowwwww",
-                                                                "Sccccreeeeeeech",
-                                                                "Wrrrrrrrrraaaaaahhh",
-                                                                "Mboggaaaaannaaaba",
-                                                                "Rrrrrraaawwwwuuuuu",
-                                                                "Gah! Fuck!",
-                                                                "Owowowowowowowowowow",
-                                                                "Hiiiiiiiissssssssss",
-                                                                "mitochondria is the powerhouse of the cell",
-                                                                "Haaaaaaaarrrrooooowww",
-                                                                "GOOOOOOOD MORNING VIETNAM!"
-                                                        ])
+                                                const soundsOfAnguish = selectRandomElement(soundOfAnguish())
                                                 message.channel.send(
                                                         soundsOfAnguish
                                                 )
                                         }
                                 )
                         }
-                        // Check if the file override.txt exists
-                        fs.access(
-                                "./data/override.txt",
-                                fs.constants.F_OK,
-                                (err) => {
-                                        if (!err) {
-                                                //if it does exist modify the prompt.
-                                                setPrompt(
-                                                        "prompt",
-                                                        removeBorgbot(args)
-                                                )
-                                        }
+                        manageFile("look", "./data/override.txt", null, (exists) => {
+                                if (exists) {
+                                    // If the file exists, modify the prompt
+                                    setPrompt("prompt", removeBorgbot(args));
                                 }
-                        )
+                            });
+                            
 
                         getOpenAIResponse(State.prompt, message.content)
                                 .then((response) => {
@@ -246,7 +192,7 @@ client.on("messageCreate", async (message) => {
                 }
 
                 // Check if the random number is less than or equal to 0.33 (33%)
-                if (randomProbability <= 0.25) {
+                if (randomProbability <= 0.15) {
                         // Execute the function
                         fs.unlink("./data/override.txt", (err) => {
                                 if (err) {
