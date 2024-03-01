@@ -30,7 +30,8 @@ const resetPrompt = reset.prompt
 //setting an initial prompt
 setPrompt("prompt", resetPrompt)
 
-const randomProbability = Math.random()
+const randomProbability1 = Math.random()
+const randomProbability2 = Math.random()
 
 const client = new Client({
         intents: [
@@ -128,7 +129,7 @@ client.on("messageCreate", async (message) => {
                 }
         }
         if (command.includes("borgbot")) {
-                if (randomProbability >= 0.95) {
+                if (randomProbability1 <= 0.05) {
                     manageFile("write", `./data/override.txt`, "true", () => {
                         const spark = "***sparks mysteriously***"
                         message.channel.send(spark)
@@ -193,7 +194,7 @@ client.on("messageCreate", async (message) => {
                 }
 
                 // Check if the random number is less than or equal to 0.33 (33%)
-                if (randomProbability <= 0.15) {
+                if (randomProbability2 <= 0.15) {
                         // Execute the function
                         fs.unlink("./data/override.txt", (err) => {
                                 if (err) {
