@@ -30,9 +30,6 @@ const resetPrompt = reset.prompt
 //setting an initial prompt
 setPrompt("prompt", resetPrompt)
 
-const randomProbability1 = Math.random()
-const randomProbability2 = Math.random()
-
 const client = new Client({
         intents: [
                 GatewayIntentBits.Guilds,
@@ -129,7 +126,7 @@ client.on("messageCreate", async (message) => {
                 }
         }
         if (command.includes("borgbot")) {
-                if (randomProbability1 <= 0.05) {
+                if (Math.random() <= 0.05) {
                     manageFile("write", `./data/override.txt`, "true", () => {
                         const spark = "***sparks mysteriously***"
                         message.channel.send(spark)
@@ -147,12 +144,23 @@ client.on("messageCreate", async (message) => {
                         //the help function to list current commands
                         message.channel.send(help.message)
                 } else if (args.includes("--throwwrench")) {
-                        manageFile("delete", `./data/override.txt`, null, () => {
-                            message.channel.send("***sparks aggressively*** \n *morkin'... down...*")
-                            console.log("Override file deleted successfully!")
-                            setPrompt("prompt", resetPrompt)
-                        });
-                    }
+                        // Execute the function
+                        fs.unlink("./data/override.txt", (err) => {
+                                if (err) {
+                                        console.error(
+                                                "Error deleting override.txt:",
+                                                err
+                                        )
+                                        return
+                                }
+                                message.channel.send(
+                                        "***sparks aggressively*** \n *morkin'... down...*"
+                                )
+                                console.log(
+                                        "Override file deleted successfully!"
+                                )
+                                setPrompt("prompt", resetPrompt)
+                        })
                 } else {
                         //if you use the override keyword, the prompt is set to equal the user's message with borgbot removed.
                         if (args.includes("--override")) {
@@ -173,15 +181,18 @@ client.on("messageCreate", async (message) => {
                                         }
                                 )
                         }
-                        manageFile("look", "./data/override.txt", null, (exists) => {
-                                if (exists) {
-                                    // If the file exists, modify the prompt
-                                    setPrompt("prompt", removeBorgbot(args));
-                                }
-                            });
-                            
-
-                        getOpenAIResponse(State.prompt, message.content)
+                        // Check if the file override.txt exists
+                        fs.access(
+                                "./data/override.txt",
+                                fs.constants.F_OK,
+                                (err) => {
+                                        if (!err) {
+                                                //if it does exist modify the prompt.
+                                                setPrompt(
+                                                        "prompt",
+                                                        removeBorgbot(args)
+                                                )
+                                                getOpenAIResponse(State.prompt, message.content)
                                 .then((response) => {
                                         message.channel.send(response) // Sending the OpenAI response back as a Discord message
                                 })
@@ -191,10 +202,24 @@ client.on("messageCreate", async (message) => {
                                                 "Internal Server Error, I'm borked."
                                         ) // Sending an error message back
                                 })
+                                        } else {
+                                                getOpenAIResponse(resetPrompt, message.content)
+                                .then((response) => {
+                                        message.channel.send(response) // Sending the OpenAI response back as a Discord message
+                                })
+                                .catch((error) => {
+                                        console.error(error) // Handle errors here
+                                        message.channel.send(
+                                                "Internal Server Error, I'm borked."
+                                        ) // Sending an error message back
+                                })
+                                        }
+                                }
+                        )
                 }
 
                 // Check if the random number is less than or equal to 0.33 (33%)
-                if (randomProbability2 <= 0.15) {
+                if (Math.random() <= 0.15) {
                         // Execute the function
                         fs.unlink("./data/override.txt", (err) => {
                                 if (err) {
@@ -213,6 +238,7 @@ client.on("messageCreate", async (message) => {
                                 setPrompt("prompt", resetPrompt)
                         })
                 }
+        }
 })
 
 client.login(process.env.token)
