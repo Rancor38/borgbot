@@ -30,6 +30,8 @@ const resetPrompt = reset.prompt
 //setting an initial prompt
 setPrompt("prompt", resetPrompt)
 
+const randomProbability = Math.random()
+
 const client = new Client({
         intents: [
                 GatewayIntentBits.Guilds,
@@ -126,7 +128,6 @@ client.on("messageCreate", async (message) => {
                 }
         }
         if (command.includes("borgbot")) {
-                const randomProbability = Math.random()
                 if (randomProbability >= 0.95) {
                     manageFile("write", `./data/override.txt`, "true", () => {
                         const spark = "***sparks mysteriously***"
