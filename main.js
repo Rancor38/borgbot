@@ -211,7 +211,6 @@ client.on("messageCreate", async (message) => {
                                 setPrompt("prompt", resetPrompt)
                         })
                 }
-        }
 })
 
 client.login(process.env.token)
