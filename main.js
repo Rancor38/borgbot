@@ -20,6 +20,8 @@ const {
 } = require("./lib/index")
 
 const { convertToGold } = require("./applications/pigCoinApp")
+const { openAIContext } = require("./lib/openAIContext")
+console.log(openAIContext())
 
 //setting a list of valid commands
 const commands = validCommands.commands
@@ -149,7 +151,7 @@ client.on("messageCreate", async (message) => {
                                         message.channel.send(spark)
                                         setPrompt(
                                                 "prompt",
-                                                removeBorgbot(args)
+                                               openAIContext() + args
                                         )
                                 }
                         )
@@ -178,8 +180,7 @@ client.on("messageCreate", async (message) => {
                                 }
                         )
                 } else {
-                        //if you use the override keyword, the prompt is set to equal the user's message with borgbot removed.
-                        // If you use the override keyword, the prompt is set to equal the user's message with borgbot removed.
+                        // If you use the override keyword, the prompt is set to equal the user's message with openAIContext
                         if (args.includes("--override")) {
                                 // Create a file to keep track of the override
                                 // Write to override.txt
@@ -188,7 +189,7 @@ client.on("messageCreate", async (message) => {
                                         manageFile("look", "./data/override.txt", null, (exists) => {
                                                 if (exists) {
                                                         // If override.txt exists, modify the prompt
-                                                        setPrompt("prompt", removeBorgbot(args));
+                                                        setPrompt("prompt", openAIContext() + args);
     
                                                         // Execute the getOpenAIResponse function
                                                         getOpenAIResponse(State.prompt, message.content)
@@ -246,7 +247,7 @@ client.on("messageCreate", async (message) => {
                                 manageFile("look", "./data/override.txt", null, (exists) => {
                                         if (exists) {
                                                 // If override.txt exists, modify the prompt
-                                                setPrompt("prompt", removeBorgbot(args));
+                                                setPrompt("prompt", openAIContext() + args);
 
                                                 // Execute the getOpenAIResponse function
                                                 getOpenAIResponse(State.prompt, message.content)
