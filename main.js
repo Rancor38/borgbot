@@ -140,6 +140,7 @@ client.on("messageCreate", async (message) => {
 			manageFile("write", `./data/override.txt`, "true", () => {
 				const spark = "***sparks mysteriously***"
 				message.channel.send(spark)
+				message.channel.send(selectRandomElement(soundOfAnguish()))
 				setPrompt("prompt", openAIContext() + args)
 			})
 		}
