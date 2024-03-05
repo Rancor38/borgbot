@@ -10,7 +10,6 @@ const {
 } = require("./data/index")
 const {
 	includeWords,
-	removeBorgbot,
 	State,
 	setPrompt,
 	selectRandomElement,
