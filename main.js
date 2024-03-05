@@ -42,7 +42,7 @@ const client = new Client({
 
 client.once(Events.ClientReady, () => {
 	console.log(
-		"Borgbot is ready for Discord, firing on all cylinders, Brrrrrrrr!"
+		"Borgbot is ready for Discord, firing on all cylinders, Brrrrrrrrr!"
 	)
 })
 
