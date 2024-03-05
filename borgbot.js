@@ -79,7 +79,7 @@ client.on("messageCreate", async (message) => {
 		message.channel.send("*You're still here?*")
 	}
 	if (command.includes("kat")) {
-		message.channel.send("*prrrrrrrrrrr* ♥")
+		message.channel.send("*prrrrrrrrrr* ♥")
 	}
 	if (command.includes("egg")) {
 		message.channel.send("🥚")
