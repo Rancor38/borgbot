@@ -16,6 +16,7 @@ const {
 	getOpenAIResponse,
 	soundOfAnguish,
 	manageFile,
+	appendToSummary
 } = require("./lib/index")
 
 const { convertToGold } = require("./applications/pigCoinApp")
@@ -83,6 +84,9 @@ client.on("messageCreate", async (message) => {
 	}
 	if (command.includes("egg")) {
 		message.channel.send("🥚")
+	}
+	if (command.includes("fire")) {
+		message.channel.send("🔥🔥🔥")
 	}
 	if (command.includes("pigcoins")) {
 		const quantity = message.content.split(" ")[1]
@@ -219,6 +223,9 @@ client.on("messageCreate", async (message) => {
 						})
 					}
 				})
+
+			// Append the message content to summary.txt
+			appendToSummary(message.content);
 			} else {
 				manageFile("look", "./data/override.txt", null, (exists) => {
 					if (exists) {
@@ -236,6 +243,8 @@ client.on("messageCreate", async (message) => {
 									"Internal Server Error, I'm borked."
 								) // Sending an error message back
 							})
+						// Append the message content to summary.txt
+    appendToSummary(message.content);
 					} else {
 						// Handle the case where override.txt doesn't exist
 						// Execute the getOpenAIResponse function
