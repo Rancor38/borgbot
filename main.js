@@ -84,9 +84,6 @@ client.on("messageCreate", async (message) => {
 	if (command.includes("egg")) {
 		message.channel.send("🥚")
 	}
-	if (command.includes("reer")) {
-		message.channel.send("*reer*")
-	}
 	if (command.includes("pigcoins")) {
 		const quantity = message.content.split(" ")[1]
 		if (Number(quantity) > 0) {
@@ -259,5 +256,17 @@ client.on("messageCreate", async (message) => {
 		}
 	}
 })
+
+client.on("messageReactionAdd", async (reaction, user) => {
+	// Ignore if the reaction is from a bot
+	if (user.bot) return;
+
+	// Fetch the emoji object
+	const emoji = reaction.emoji;
+
+	// Send a message acknowledging the reaction
+	reaction.message.channel.send(`Thank you for the ${emoji.name}!`);
+});
+
 
 client.login(process.env.token)
