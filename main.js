@@ -16,7 +16,7 @@ const {
 	getOpenAIResponse,
 	soundOfAnguish,
 	manageFile,
-	appendToSummary
+	appendToSummary,
 } = require("./lib/index")
 
 const { convertToGold } = require("./applications/pigCoinApp")
@@ -185,6 +185,11 @@ client.on("messageCreate", async (message) => {
 								getOpenAIResponse(State.prompt, message.content)
 									.then((response) => {
 										message.channel.send(response) // Sending the OpenAI response back as a Discord message
+										// Append the message content to summary.txt
+										appendToSummary(
+											message.content,
+											response
+										)
 									})
 									.catch((error) => {
 										console.error(error) // Handle errors here
@@ -223,9 +228,6 @@ client.on("messageCreate", async (message) => {
 						})
 					}
 				})
-
-			// Append the message content to summary.txt
-			appendToSummary(message.content);
 			} else {
 				manageFile("look", "./data/override.txt", null, (exists) => {
 					if (exists) {
@@ -236,6 +238,8 @@ client.on("messageCreate", async (message) => {
 						getOpenAIResponse(State.prompt, message.content)
 							.then((response) => {
 								message.channel.send(response) // Sending the OpenAI response back as a Discord message
+								// Append the message content to summary.txt
+								appendToSummary(message.content, response)
 							})
 							.catch((error) => {
 								console.error(error) // Handle errors here
@@ -243,8 +247,6 @@ client.on("messageCreate", async (message) => {
 									"Internal Server Error, I'm borked."
 								) // Sending an error message back
 							})
-						// Append the message content to summary.txt
-    appendToSummary(message.content);
 					} else {
 						// Handle the case where override.txt doesn't exist
 						// Execute the getOpenAIResponse function
@@ -268,14 +270,13 @@ client.on("messageCreate", async (message) => {
 
 client.on("messageReactionAdd", async (reaction, user) => {
 	// Ignore if the reaction is from a bot
-	if (user.bot) return;
+	if (user.bot) return
 
 	// Fetch the emoji object
-	const emoji = reaction.emoji;
+	const emoji = reaction.emoji
 
 	// Send a message acknowledging the reaction
-	reaction.message.channel.send(`Thank you for the ${emoji.name}!`);
-});
-
+	reaction.message.channel.send(`Thank you for the ${emoji.name}!`)
+})
 
 client.login(process.env.token)
