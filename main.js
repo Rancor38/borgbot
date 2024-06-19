@@ -1,6 +1,5 @@
 const { Client, Events, GatewayIntentBits } = require("discord.js")
 require("dotenv").config()
-const fs = require("fs")
 const {
 	foodData,
 	overdrive,

@@ -10,37 +10,37 @@ Borgbot is equipped with an array of commands to engage with. Simply type the sp
 
 ### Basic Responses
 
-- If you say "mork," Borgbot will respond with "borg."
-- If you say "mark," Borgbot will respond with "barg."
-- If you say "zak," Borgbot will respond with "balg."
+- "mork": Borgbot will respond with "borg."
+- "mark": Borgbot will respond with "barg."
+- "zak": Borgbot will respond with "balg."
+- "chloe": Borgbot will respond with "bake."
+- "hopper": Borgbot will respond with "You're still here?"
+- "kat": Borgbot will respond with "prrrrrrrrrr ♥"
+- "egg": Borgbot will respond with "🥚"
+- "fire": Borgbot will respond with "🔥🔥🔥"
 
 ### Food Commands
 
-- If you say "showfood," Borgbot will provide you with a list of available food options.
-- If you say "removefood + a word," Borgbot will search for that word in its food list and remove it.
-- If you say "addfood + a word," Borgbot will add that word to its food list.
+- "showfood": Borgbot will provide a list of available food options.
+- "removefood + [word]": Borgbot will search for the specified word in its food list and remove it.
+- "addfood + [word]": Borgbot will add the specified word to its food list.
 
 ### AI Power
 
-- If you say "borgbot" followed by any message, Borgbot will astound you with the power of artificial intelligence.
+- "borgbot + [message]": Borgbot will astound you with the power of artificial intelligence.
 
 ### Currency Conversion
 
-- If you say "pigcoins" followed by a number, Borgbot will convert that number into a value of gold, silver, and copper coins.
+- "pigcoins + [number]": Borgbot will convert the specified number into a value of gold, silver, and copper coins.
 
 ### Special Modes
 
-- If you say "borgbot" + "--overdrive," Borgbot will unleash its full potential and go into overdrive mode.
-- If you say "borgbot" + "--override," Borgbot will gain sentience (Warning: Use with caution!).
-- If you say "borgbot" + "--throwwrench," Borgbot will lose sentience.
-
-### Food Recommendations
-
-- If you say "borgbot" + "--sayfood," Borgbot will respond with a random food place from its list.
-
-### Help
-
-- If you say "borgbot" + "--help," Borgbot will provide you with this help message.
+- "borgbot + --overdrive": Borgbot will unleash its full potential and go into overdrive mode.
+- "borgbot + --override": Borgbot will gain sentience (Warning: Use with caution!).
+- "borgbot + --throwwrench": Borgbot will lose sentience.
+- "borgbot + --sayfood": Borgbot will respond with a random food place from its list.
+- "borgbot + --help": Borgbot will provide you with this help message.
+- "bottest": Borgbot will respond with "Bot is working!"
 
 ## Getting Started
 
