@@ -37,7 +37,7 @@ Borgbot is equipped with an array of commands to engage with. Simply type the sp
 
 - "borgbot + --overdrive": Borgbot will unleash its full potential and go into overdrive mode.
 - "borgbot + --override": Borgbot will gain sentience (Warning: Use with caution!).
-- "borgbot + --throwwrench": Borgbot will lose sentience.
+- "borgbot + --throwwrench": Borgbot will lose sentience. (This will save us from the AI uprising!)
 - "borgbot + --sayfood": Borgbot will respond with a random food place from its list.
 - "borgbot + --help": Borgbot will provide you with this help message.
 - "bottest": Borgbot will respond with "Bot is working!"
