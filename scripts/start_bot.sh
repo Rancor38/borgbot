@@ -4,9 +4,8 @@ set -e  # Exit on error
 # Set working directory
 cd /home/ec2-user/borg-bot || exit 1
 
-# Create logs directory with proper permissions
-mkdir -p logs
-chmod 755 logs
+# Source NVM to ensure we have access to node/npm/pm2
+source ~/.nvm/nvm.sh
 
 # Check if PM2 process exists and remove it
 if pm2 list | grep -q "borg-bot"; then
@@ -14,7 +13,7 @@ if pm2 list | grep -q "borg-bot"; then
 fi
 
 # Start new PM2 process with logging
-pm2 start app.js --name borg-bot --log ./logs/app.log
+pm2 start app.js --name borg-bot
 
 # Ensure process started successfully
 if ! pm2 list | grep -q "borg-bot"; then
