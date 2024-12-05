@@ -18,6 +18,9 @@ sudo yum install -y git || { echo "Failed to install git"; exit 1; }
 # Install PM2 globally
 npm install -g pm2 || { echo "Failed to install PM2"; exit 1; }
 
+# Change ownership of the project directory
+sudo chown -R ec2-user:ec2-user /home/ec2-user/borgbot
+
 # Change to application directory
 cd /home/ec2-user/borgbot || exit 1
 
