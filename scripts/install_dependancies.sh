@@ -18,6 +18,12 @@ sudo yum install -y git || { echo "Failed to install git"; exit 1; }
 # Install PM2 globally
 npm install -g pm2 || { echo "Failed to install PM2"; exit 1; }
 
+# Change to application directory
+cd /home/ec2-user/borgbot || exit 1
+
+# Install project dependencies
+npm install || { echo "Failed to install npm dependencies"; exit 1; }
+
 # Verify installations
 node --version
 npm --version
