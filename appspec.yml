@@ -1,14 +1,14 @@
 version: 0.0
 os: linux
 files:
-  - source: /
-    destination: /home/ec2-user/borg-bot
+    - source: /
+      destination: /home/ec2-user/borgbot
 hooks:
-  AfterInstall:
-    - location: scripts/install_dependancies.sh
-      timeout: 300
-      runas: ec2-user
-  ApplicationStart:
-    - location: scripts/start_bot.sh
-      timeout: 300
-      runas: ec2-user
+    AfterInstall:
+        - location: scripts/install_dependancies.sh
+          timeout: 300
+          runas: ec2-user
+    ApplicationStart:
+        - location: scripts/start_bot.sh
+          timeout: 300
+          runas: ec2-user
