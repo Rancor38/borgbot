@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e  # Exit on error
 
+# Configure AWS CLI with the region
+aws configure set region us-west-1 
+
 # Path to the borgbot secrets in Secrets Manager
 SECRET_ID="Borgbot_Secrets"
 
