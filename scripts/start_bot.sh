@@ -4,6 +4,10 @@ set -e  # Exit on error
 # Set working directory
 cd /home/ec2-user/borg-bot || exit 1
 
+# Create logs directory with proper permissions
+mkdir -p logs
+chmod 755 logs
+
 # Check if PM2 process exists and remove it
 if pm2 list | grep -q "borg-bot"; then
     pm2 delete borg-bot
