@@ -8,7 +8,7 @@ aws configure set region us-west-1
 SECRET_ID="Borgbot_Secrets"
 
 # Retrieve secrets as JSON
-secrets_json=$(aws secretsmanager get-secret-value --secret-id "$SECRET_ID" --query SecretString --output text)
+secrets_json=$(aws secretsmanager get-secret-value --secret-id "$SECRET_ID" --region us-east-1 --query SecretString --output text)
 
 if [ -z "$secrets_json" ]; then
   echo "No secrets found for Borgbot."
@@ -22,5 +22,3 @@ echo "$secrets_json" | jq -r 'to_entries | map("\(.key)=\(.value|tostring)") | .
 chmod 600 /home/ec2-user/borgbot/.env
 
 echo "Borgbot .env file created successfully."
-
-chmod +x scripts/setup_env.sh
